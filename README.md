@@ -1,14 +1,14 @@
 # Internal search with Google Drive, Salesforce and Confluence
 
-This sample app allow you to index and search contents from Google Drive, Salesforce and Confluence.
+This sample app allows you to index and search content from Google Drive, Salesforce and Confluence in a single interface.
 
 ## Features
 
 The sample app uses the following features:
 
-- Easily index contents from Google Drive, Salesforce and Confluence to Algolia using [Tray.io](https://tray.io/)
-- Search interface built using [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/)
-- Dynamic facets display using [DynamicWidgets](https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/)
+- Easily index content from Google Drive, Salesforce and Confluence to Algolia using [Tray.io](https://tray.io/) with little code
+- Search all your content in a single search interface built with [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/)
+- Dynamically display facets using [DynamicWidgets](https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/)
 
 ## Demo (Try it yourself!)
 
@@ -18,9 +18,9 @@ The sample app uses the following features:
 
 ## How to run the sample app locally
 
-The [client](client) is React Application using [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).
+The [client](client) is a React app using [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/).
 
-The indexing part is implemented using three different worflows running on [Tray.io](https://tray.io/).
+This sample app collects data from Google Drive, Salesforce, and Confluence. The indexing for each data source is implemented in three different [Tray.io](https://tray.io/) workflows.
 
 ### 1. Clone this repository
 
@@ -48,7 +48,7 @@ ALGOLIA_APP_ID=<replace-with-your-algolia-app-id>
 
 After you set up your Algolia account and Algolia application, [create and populate an index](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/).
 
-To upload your data, you can use the [Algolia dashboard](https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/importing-from-the-dashboard/) or use on of Algolia's [API clients](https://www.algolia.com/developers/#integrations).
+To upload your data, you can use the [Algolia dashboard](https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/how-to/importing-from-the-dashboard/) or use one of Algolia's [API clients](https://www.algolia.com/developers/#integrations).
 
 After creating the index, set the environment variables `ALGOLIA_INDEX_NAME` and `ALGOLIA_API_KEY` in the `.env` file:
 
@@ -59,17 +59,17 @@ ALGOLIA_API_KEY=<replace-with-your-algolia-api-key>
 
 ### 6. Populate your index using Tray.io
 
-We provide three Tray.io [worflows](https://tray.io/documentation/platform/version-control/importing-exporting-workflows/), each of them allow indexing contents from one platform to Algolia:
+We provide three Tray.io [workflows](https://tray.io/documentation/platform/version-control/importing-exporting-workflows/) for indexing the content, one for each data source:
 
 - [Google Drive](workflows/workflow_google-drive-algolia.json)
 - [Salesforce](workflows/workflow_salesforce-algolia.json)
 - [Confluence](workflows/confluence-algolia.json)
 
-For exemple, if you want to index content from **SalesForce**:
+For example, if you want to index content from **Salesforce**:
 
 1. Create an account on [Tray.io](https://tray.io) (They offer a 14 days trial period).
-2. Upload the worflow JSON file (the Tray.io platform will ask you to authenticate against Algolia and the service from which the workflow is extracting data).
-3. Set the `indexName` config data. (https://tray.io/documentation/embedded/core-topics/config-data/setting-config-data/).
+2. Upload the workflow JSON file (Tray.io will ask you to authenticate against Algolia and Salesforce).
+3. On Tray.io, set the `indexName` in the project's [config data](https://tray.io/documentation/embedded/core-topics/config-data/setting-config-data/).
 4. Run the workflow!
 
 ### 7. Start the [client](client)
@@ -77,7 +77,7 @@ For exemple, if you want to index content from **SalesForce**:
 **Requirements**
 
 - Node.js, at least version 10
-- Configured .env file
+- Configured `.env` file
 
 **How to run**
 
