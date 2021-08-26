@@ -1,0 +1,1033 @@
+ {
+  "export_type": "workflow",
+  "projects": [],
+  "tray_export_version": 4,
+  "workflows": [
+    {
+      "id": "8ed4cc87-7caf-4e7a-a113-5e957c329fc2",
+      "created": "2021-08-11T07:05:11.026Z",
+      "workspace_id": "b907f427-56aa-48dd-bd4e-fb134dd4526c",
+      "creator": "092693fa-eaf3-41cd-9838-975872323870",
+      "version": {
+        "id": "02494210-801a-4db7-842d-3cc09bf8222f",
+        "created": "2021-08-23T11:24:07.344Z"
+      },
+      "title": "Google Drive -> Algolia",
+      "enabled": false,
+      "tags": [],
+      "settings": {
+        "config": {
+          "indexName": ""
+        },
+        "input_schema": {},
+        "output_schema": {}
+      },
+      "steps_structure": [
+        {
+          "name": "trigger",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "date-time-helpers-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "storage-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "boolean-condition-4",
+          "type": "branch",
+          "content": {
+            "true": [
+              {
+                "name": "storage-10",
+                "type": "normal",
+                "content": {}
+              }
+            ],
+            "false": [
+              {
+                "name": "storage-9",
+                "type": "normal",
+                "content": {}
+              }
+            ]
+          }
+        },
+        {
+          "name": "storage-11",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "loop-3",
+          "type": "loop",
+          "content": {
+            "_loop": [
+              {
+                "name": "storage-5",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "drive-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "loop-1",
+                "type": "loop",
+                "content": {
+                  "_loop": [
+                    {
+                      "name": "boolean-condition-1",
+                      "type": "branch",
+                      "content": {
+                        "true": [
+                          {
+                            "name": "drive-1",
+                            "type": "normal",
+                            "content": {}
+                          },
+                          {
+                            "name": "file-helpers-1",
+                            "type": "normal",
+                            "content": {}
+                          }
+                        ],
+                        "false": []
+                      }
+                    },
+                    {
+                      "name": "object-helpers-1",
+                      "type": "normal",
+                      "content": {}
+                    },
+                    {
+                      "name": "storage-3",
+                      "type": "normal",
+                      "content": {}
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "storage-6",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "script-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "http-client-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "boolean-condition-2",
+                "type": "branch",
+                "content": {
+                  "true": [
+                    {
+                      "name": "break-loop-1",
+                      "type": "break",
+                      "content": {},
+                      "target": "loop-3"
+                    }
+                  ],
+                  "false": [
+                    {
+                      "name": "storage-7",
+                      "type": "normal",
+                      "content": {}
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "storage-2",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "terminate-1",
+          "type": "normal",
+          "content": {}
+        }
+      ],
+      "steps": {
+        "loop-3": {
+          "title": "Gdrive Pagination",
+          "description": "Using pageToken",
+          "connector": {
+            "name": "loop",
+            "version": "1.1"
+          },
+          "operation": "loop_forever",
+          "output_schema": {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "id": "http://jsonschema.net",
+            "required": true,
+            "properties": {
+              "index": {
+                "type": "number",
+                "id": "http://jsonschema.net/index"
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-2": {
+          "title": "Set lastRunTime",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Workflow"
+            },
+            "key": {
+              "type": "string",
+              "value": "lastRunTime"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.date-time-helpers-1.result"
+            }
+          }
+        },
+        "storage-5": {
+          "title": "Get NextPageToken",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "nextPageToken"
+            },
+            "default_value": {
+              "type": "string",
+              "value": ""
+            }
+          }
+        },
+        "storage-9": {
+          "title": "Set GDrive Query (recent)",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "googleDriveQuery"
+            },
+            "value": {
+              "type": "string",
+              "value": "modifiedTime > '{$.steps.storage-1.value}' and (mimeType = 'application/vnd.google-apps.document' or mimeType = 'application/vnd.google-apps.spreadsheet' or mimeType = 'application/vnd.google-apps.presentation' or mimeType = 'application/vnd.google-apps.folder' or mimeType = 'application/vnd.google-apps.unknown' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' or mimeType = 'application/pdf')"
+            }
+          }
+        },
+        "boolean-condition-2": {
+          "title": "NextPageToken Is Null",
+          "connector": {
+            "name": "boolean-condition",
+            "version": "2.3"
+          },
+          "operation": "boolean_condition",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.drive-2.nextPageToken",
+                      "fallback": {
+                        "value": null,
+                        "type": "null"
+                      }
+                    },
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "value2": {
+                      "type": "null",
+                      "value": null
+                    }
+                  }
+                }
+              ]
+            },
+            "strictness": {
+              "type": "string",
+              "value": "All"
+            }
+          }
+        },
+        "storage-3": {
+          "title": "Data Storage",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "append_to_list",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "files"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.object-helpers-1.result"
+            },
+            "create_if_missing": {
+              "type": "boolean",
+              "value": true
+            }
+          }
+        },
+        "boolean-condition-4": {
+          "title": "LastRunTime Is Null",
+          "connector": {
+            "name": "boolean-condition",
+            "version": "2.3"
+          },
+          "operation": "boolean_condition",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.storage-1.value"
+                    },
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "value2": {
+                      "type": "null",
+                      "value": null
+                    }
+                  }
+                }
+              ]
+            },
+            "strictness": {
+              "type": "string",
+              "value": "All"
+            }
+          }
+        },
+        "loop-1": {
+          "title": "Loop",
+          "connector": {
+            "name": "loop",
+            "version": "1.1"
+          },
+          "operation": "loop_array",
+          "output_schema": {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "id": "http://jsonschema.net",
+            "required": true,
+            "additionalProperties": false,
+            "properties": {
+              "value": {
+                "type": "object",
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "mimeType": {
+                    "type": "string"
+                  }
+                }
+              },
+              "count": {
+                "type": "number",
+                "id": "http://jsonschema.net/total"
+              },
+              "index": {
+                "type": "number",
+                "id": "http://jsonschema.net/index"
+              },
+              "is_first": {
+                "type": "boolean",
+                "id": "http://jsonschema.net/is_first"
+              },
+              "is_last": {
+                "type": "boolean",
+                "id": "http://jsonschema.net/is_last"
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "array": {
+              "type": "jsonpath",
+              "value": "$.steps.drive-2.files"
+            }
+          }
+        },
+        "storage-11": {
+          "title": "Get GDrive Query",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "default_value": {
+              "type": "null",
+              "value": null
+            },
+            "key": {
+              "type": "string",
+              "value": "googleDriveQuery"
+            }
+          }
+        },
+        "boolean-condition-1": {
+          "title": "Can Extract Content",
+          "connector": {
+            "name": "boolean-condition",
+            "version": "2.3"
+          },
+          "operation": "boolean_condition",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.loop-1.value.mimeType"
+                    },
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "value2": {
+                      "type": "string",
+                      "value": "application/vnd.google-apps.document"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "is_case_sensitive": {
+                      "type": "boolean",
+                      "value": false
+                    },
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.loop-1.value.mimeType"
+                    },
+                    "value2": {
+                      "type": "string",
+                      "value": "application/vnd.ms-powerpoint"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "is_case_sensitive": {
+                      "type": "boolean",
+                      "value": false
+                    },
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.loop-1.value.mimeType"
+                    },
+                    "value2": {
+                      "type": "string",
+                      "value": "application/vnd.google-apps.presentation"
+                    }
+                  }
+                }
+              ]
+            },
+            "strictness": {
+              "type": "string",
+              "value": "Any"
+            }
+          }
+        },
+        "terminate-1": {
+          "title": "Terminate",
+          "connector": {
+            "name": "terminate",
+            "version": "1.0"
+          },
+          "operation": "terminate_run",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-7": {
+          "title": "Set NextPageToken",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "nextPageToken"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.drive-2.nextPageToken"
+            }
+          }
+        },
+        "http-client-1": {
+          "title": "Index Documents",
+          "connector": {
+            "name": "http-client",
+            "version": "5.4"
+          },
+          "operation": "post_request",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "05df1822-b8e2-4d68-9c22-a04806ddfe45",
+            "title": "Algolia account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/icons/15f0f0f427b7a1c7c54051234900fdc4.png"
+            },
+            "scopes": [],
+            "service_name": "algolia",
+            "service_version": 1
+          },
+          "properties": {
+            "body": {
+              "type": "object",
+              "value": {
+                "raw": {
+                  "type": "jsonpath",
+                  "value": "$.steps.script-2.result"
+                }
+              }
+            },
+            "headers": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "X-Algolia-Application-Id"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.auth.application_id"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "X-Algolia-API-Key"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.auth.admin_api_key"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "Content-Type"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "application/json; charset=UTF-8"
+                    }
+                  }
+                }
+              ]
+            },
+            "auth": {
+              "type": "object",
+              "value": {
+                "none": {
+                  "type": "null",
+                  "value": null
+                }
+              }
+            },
+            "follow_redirect": {
+              "type": "boolean",
+              "value": false
+            },
+            "parse_response": {
+              "type": "string",
+              "value": "true"
+            },
+            "follow_keep_method": {
+              "type": "boolean",
+              "value": false
+            },
+            "url": {
+              "type": "string",
+              "value": "https://{$.auth.application_id}.algolia.net/1/indexes/{$.config.indexName}/batch"
+            },
+            "reject_unauthorized": {
+              "type": "boolean",
+              "value": true
+            },
+            "status_code": {
+              "type": "object",
+              "value": {
+                "range": {
+                  "type": "object",
+                  "value": {
+                    "from": {
+                      "type": "integer",
+                      "value": 200
+                    },
+                    "to": {
+                      "type": "integer",
+                      "value": 299
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "storage-10": {
+          "title": "Set GDrive Query (all)",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "googleDriveQuery"
+            },
+            "value": {
+              "type": "string",
+              "value": " mimeType = 'application/vnd.google-apps.document' or mimeType = 'application/vnd.google-apps.spreadsheet'or mimeType = 'application/vnd.google-apps.presentation' or mimeType = 'application/vnd.google-apps.folder'or mimeType = 'application/vnd.google-apps.unknown' or mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'or mimeType = 'application/pdf'"
+            }
+          }
+        },
+        "drive-1": {
+          "title": "Download File",
+          "connector": {
+            "name": "drive",
+            "version": "3.0"
+          },
+          "operation": "download_google_file",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "760097ff-9a03-4501-b1e8-131705b0003e",
+            "title": "Google Drive account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/service/icons/4d576e9893e22ef962c9d95c13c521f7.png"
+            },
+            "scopes": [
+              "https://www.googleapis.com/auth/drive",
+              "https://www.googleapis.com/auth/drive.appdata",
+              "https://www.googleapis.com/auth/drive.file",
+              "https://www.googleapis.com/auth/drive.metadata"
+            ],
+            "service_name": "google-drive",
+            "service_version": 2
+          },
+          "properties": {
+            "access_token": {
+              "type": "jsonpath",
+              "value": "$.auth.access_token"
+            },
+            "file_id": {
+              "type": "jsonpath",
+              "value": "$.steps.loop-1.value.id"
+            },
+            "mime_type": {
+              "type": "string",
+              "value": "text/plain"
+            }
+          }
+        },
+        "date-time-helpers-1": {
+          "title": "Get current time and date",
+          "connector": {
+            "name": "date-time-helpers",
+            "version": "3.0"
+          },
+          "operation": "current_timestamp",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "format": {
+              "type": "object",
+              "value": {
+                "existing_format": {
+                  "type": "string",
+                  "value": "YYYY-MM-DDTHH:mm:ssZ"
+                }
+              }
+            }
+          }
+        },
+        "storage-1": {
+          "title": "Fetch Last Run Time",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Workflow"
+            },
+            "default_value": {
+              "type": "null",
+              "value": null
+            },
+            "key": {
+              "type": "string",
+              "value": "lastRunTime"
+            }
+          }
+        },
+        "break-loop-1": {
+          "title": "Break loop",
+          "connector": {
+            "name": "break-loop",
+            "version": "1.0"
+          },
+          "operation": "break",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-6": {
+          "title": "Data Storage",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "default_value": {
+              "type": "array",
+              "value": []
+            },
+            "key": {
+              "type": "string",
+              "value": "files"
+            }
+          }
+        },
+        "object-helpers-1": {
+          "title": "Add Content To Doc",
+          "connector": {
+            "name": "object-helpers",
+            "version": "4.1"
+          },
+          "operation": "add_value_by_key",
+          "output_schema": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {
+            "source": {
+              "type": "jsonpath",
+              "value": "$.steps.loop-1.value"
+            },
+            "key": {
+              "type": "string",
+              "value": "content"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.file-helpers-1.result",
+              "fallback": {
+                "value": "test",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "drive-2": {
+          "title": "Fetch documents",
+          "connector": {
+            "name": "drive",
+            "version": "3.0"
+          },
+          "operation": "list_files",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "760097ff-9a03-4501-b1e8-131705b0003e",
+            "title": "Clement Denoix's Google Drive account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/service/icons/4d576e9893e22ef962c9d95c13c521f7.png"
+            },
+            "scopes": [
+              "https://www.googleapis.com/auth/drive",
+              "https://www.googleapis.com/auth/drive.appdata",
+              "https://www.googleapis.com/auth/drive.file",
+              "https://www.googleapis.com/auth/drive.metadata"
+            ],
+            "service_name": "google-drive",
+            "service_version": 2
+          },
+          "properties": {
+            "supports_all_drives": {
+              "type": "boolean",
+              "value": true
+            },
+            "include_items_from_all_drives": {
+              "type": "boolean",
+              "value": true
+            },
+            "query": {
+              "type": "jsonpath",
+              "value": "$.steps.storage-11.value"
+            },
+            "page_token": {
+              "type": "jsonpath",
+              "value": "$.steps.storage-5.value",
+              "fallback": {
+                "type": "string"
+              }
+            },
+            "include_permissions_for_view": {
+              "type": "string",
+              "value": "published"
+            },
+            "folder": {
+              "type": "string",
+              "value": "1SkTB36G57toxlygHJ0I-gn3zmrfdb1PE"
+            },
+            "fields": {
+              "type": "string",
+              "value": "files(id,name,modifiedTime,createdTime, webViewLink,lastModifyingUser/displayName,owners/displayName,mimeType), nextPageToken"
+            },
+            "source": {
+              "type": "string",
+              "value": "allDrives"
+            },
+            "limit": {
+              "type": "integer",
+              "value": 100
+            },
+            "access_token": {
+              "type": "jsonpath",
+              "value": "$.auth.access_token"
+            }
+          }
+        },
+        "script-2": {
+          "title": "Docs -> Algolia ops",
+          "connector": {
+            "name": "script",
+            "version": "3.0"
+          },
+          "operation": "execute",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "variables": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "string",
+                      "value": "files"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.storage-6.value"
+                    }
+                  }
+                }
+              ]
+            },
+            "script": {
+              "type": "string",
+              "value": "// Map each one of the 'file' object from Google Drive to an Algolia 'addObject' operation.\nexports.step = function(input, fileInput) {\n        const { files } = input;\n        const records = [];\n        const mimeTypes = {\n          'pdf': ['application/pdf'],\n          'document': ['application/vnd.google-apps.document'],\n          'spreadsheet': ['application/vnd.google-apps.spreadsheet', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],\n          'presentation': ['application/vnd.google-apps.presentation'],\n          'folder': ['application/vnd.google-apps.folder'],\n          'unknown': ['application/vnd.google-apps.unknown']\n        };\n        for (let index = 0; index < files.length; index++) {\n              const file = files[index];\n              const record = {\n                objectID:  file.id,\n           \t    source: 'Google Drive',\n                name: file.name,\n                createdAt: moment(file.createdTime).unix(),\n                createdBy: file.owners[0].displayName,\n                lastUpdatedAt: moment(file.modifiedTime).unix(),\n                lastUpdatedBy: file.lastModifyingUser ? file.lastModifyingUser.displayName : null,\n                mimetype: _.findKey(mimeTypes, function(o){ return _.indexOf(o, file.mimeType) > -1})\n              }\n              let contentIndex = 0;\n              let content = file.content;\n              while (content.length) {\n                      const chunk = content.replace(/^(.{600}[^\\s]*).*/, '$1');\n                      content = content.substring(chunk.length);\n                      records.push(\n                        Object.assign({}, record, {\n                          content: chunk,\n                          objectID: `${file.id}_${contentIndex}`\n                        })\n                      );\n                     contentIndex++;\n              }\n        }\n        return {\n           requests: records.map(record => {\n               return {\n                 action: 'addObject',\n                 body: record\n               }\n             })\n         }\n};"
+            },
+            "file_output": {
+              "type": "boolean",
+              "value": false
+            }
+          }
+        },
+        "file-helpers-1": {
+          "title": "Read File Content",
+          "connector": {
+            "name": "file-helpers",
+            "version": "2.1"
+          },
+          "operation": "read_file_contents",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "url": {
+              "type": "jsonpath",
+              "value": "$.steps.drive-1.file.url"
+            }
+          }
+        },
+        "trigger": {
+          "title": "Scheduled Trigger",
+          "connector": {
+            "name": "scheduled",
+            "version": "3.5"
+          },
+          "operation": "simple",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "synchronous": {
+              "type": "boolean",
+              "value": true
+            },
+            "public_url": {
+              "type": "jsonpath",
+              "value": "$.env.public_url"
+            },
+            "interval": {
+              "type": "integer",
+              "value": 1
+            },
+            "time_unit": {
+              "type": "string",
+              "value": "minutes"
+            }
+          }
+        }
+      },
+      "dependencies": []
+    }
+  ]
+}

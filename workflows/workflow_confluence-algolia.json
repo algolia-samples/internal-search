@@ -1,0 +1,807 @@
+ {
+  "export_type": "workflow",
+  "projects": [],
+  "tray_export_version": 4,
+  "workflows": [
+    {
+      "id": "0dca4bf7-7a87-4579-918e-42c16008743a",
+      "created": "2021-08-18T04:23:05.698Z",
+      "workspace_id": "b907f427-56aa-48dd-bd4e-fb134dd4526c",
+      "creator": "092693fa-eaf3-41cd-9838-975872323870",
+      "version": {
+        "id": "f4d55b48-3aa8-447e-ad2a-6bd13bb5f4aa",
+        "created": "2021-08-23T11:28:11.769Z"
+      },
+      "title": "Confluence -> Algolia",
+      "enabled": false,
+      "tags": [],
+      "settings": {
+        "config": {
+          "indexName": ""
+        },
+        "input_schema": {},
+        "output_schema": {}
+      },
+      "steps_structure": [
+        {
+          "name": "trigger",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "date-time-helpers-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "storage-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "text-helpers-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "loop-3",
+          "type": "loop",
+          "content": {
+            "_loop": [
+              {
+                "name": "storage-5",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "http-client-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "math-helpers-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "boolean-condition-2",
+                "type": "branch",
+                "content": {
+                  "true": [
+                    {
+                      "name": "break-loop-1",
+                      "type": "break",
+                      "content": {},
+                      "target": "loop-3"
+                    }
+                  ],
+                  "false": [
+                    {
+                      "name": "storage-7",
+                      "type": "normal",
+                      "content": {}
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "script-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "http-client-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "date-time-helpers-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "boolean-condition-1",
+                "type": "branch",
+                "content": {
+                  "true": [
+                    {
+                      "name": "break-loop-2",
+                      "type": "break",
+                      "content": {},
+                      "target": "loop-3"
+                    }
+                  ],
+                  "false": []
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "storage-2",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "terminate-1",
+          "type": "normal",
+          "content": {}
+        }
+      ],
+      "steps": {
+        "loop-3": {
+          "title": "Confluence Pagination",
+          "description": "Using pageToken",
+          "connector": {
+            "name": "loop",
+            "version": "1.1"
+          },
+          "operation": "loop_forever",
+          "output_schema": {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "id": "http://jsonschema.net",
+            "required": true,
+            "properties": {
+              "index": {
+                "type": "number",
+                "id": "http://jsonschema.net/index"
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-2": {
+          "title": "Set LastRunTime",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Workflow"
+            },
+            "key": {
+              "type": "string",
+              "value": "lastRunTime"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.date-time-helpers-1.result"
+            }
+          }
+        },
+        "storage-5": {
+          "title": "Get Cursor",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "cursor"
+            },
+            "default_value": {
+              "type": "number",
+              "value": 0
+            }
+          }
+        },
+        "boolean-condition-2": {
+          "title": "Results is empty",
+          "connector": {
+            "name": "boolean-condition",
+            "version": "2.3"
+          },
+          "operation": "boolean_condition",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.http-client-2.response.body.results"
+                    },
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "value2": {
+                      "type": "array",
+                      "value": []
+                    }
+                  }
+                }
+              ]
+            },
+            "strictness": {
+              "type": "string",
+              "value": "All"
+            }
+          }
+        },
+        "text-helpers-1": {
+          "title": "Build Confluence Auth",
+          "connector": {
+            "name": "text-helpers",
+            "version": "1.15"
+          },
+          "operation": "base64_encoderdecoder",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "df794c40-89d9-45a4-bb78-817deb28c8ef",
+            "title": "Confluence account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/artisan/icons/a2c18f37c29299af8db8230ec35e59cd.png"
+            },
+            "scopes": [],
+            "service_name": "confluence",
+            "service_version": 1
+          },
+          "properties": {
+            "operation": {
+              "type": "string",
+              "value": "encode"
+            },
+            "value": {
+              "type": "string",
+              "value": "{$.auth.username}:{$.auth.api_token}"
+            }
+          }
+        },
+        "boolean-condition-1": {
+          "title": "Is LastUpdated < LastRunTime",
+          "connector": {
+            "name": "boolean-condition",
+            "version": "2.3"
+          },
+          "operation": "boolean_condition",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.date-time-helpers-2.result"
+                    },
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "!=="
+                    },
+                    "value2": {
+                      "type": "boolean",
+                      "value": true
+                    }
+                  }
+                }
+              ]
+            },
+            "strictness": {
+              "type": "string",
+              "value": "All"
+            }
+          }
+        },
+        "terminate-1": {
+          "title": "Terminate",
+          "connector": {
+            "name": "terminate",
+            "version": "1.0"
+          },
+          "operation": "terminate_run",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-7": {
+          "title": "Set Next Cursor",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "cursor"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.math-helpers-1.result"
+            }
+          }
+        },
+        "http-client-1": {
+          "title": "Http Client",
+          "connector": {
+            "name": "http-client",
+            "version": "5.4"
+          },
+          "operation": "post_request",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "05df1822-b8e2-4d68-9c22-a04806ddfe45",
+            "title": "Algolia account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/icons/15f0f0f427b7a1c7c54051234900fdc4.png"
+            },
+            "scopes": [],
+            "service_name": "algolia",
+            "service_version": 1
+          },
+          "properties": {
+            "body": {
+              "type": "object",
+              "value": {
+                "raw": {
+                  "type": "jsonpath",
+                  "value": "$.steps.script-2.result"
+                }
+              }
+            },
+            "headers": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "X-Algolia-Application-Id"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.auth.application_id"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "X-Algolia-API-Key"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.auth.admin_api_key"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "Content-Type"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "application/json; charset=UTF-8"
+                    }
+                  }
+                }
+              ]
+            },
+            "auth": {
+              "type": "object",
+              "value": {
+                "none": {
+                  "type": "null",
+                  "value": null
+                }
+              }
+            },
+            "follow_redirect": {
+              "type": "boolean",
+              "value": false
+            },
+            "parse_response": {
+              "type": "string",
+              "value": "true"
+            },
+            "follow_keep_method": {
+              "type": "boolean",
+              "value": false
+            },
+            "url": {
+              "type": "string",
+              "value": "https://{$.auth.application_id}.algolia.net/1/indexes/{$.config.indexName}/batch"
+            },
+            "reject_unauthorized": {
+              "type": "boolean",
+              "value": true
+            },
+            "status_code": {
+              "type": "object",
+              "value": {
+                "range": {
+                  "type": "object",
+                  "value": {
+                    "from": {
+                      "type": "integer",
+                      "value": 200
+                    },
+                    "to": {
+                      "type": "integer",
+                      "value": 299
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "math-helpers-1": {
+          "title": "Math Helpers",
+          "connector": {
+            "name": "math-helpers",
+            "version": "2.0"
+          },
+          "operation": "sum",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "values": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "jsonpath",
+                  "value": "$.steps.storage-5.value"
+                },
+                {
+                  "type": "jsonpath",
+                  "value": "$.steps.http-client-2.response.body.size"
+                }
+              ]
+            }
+          }
+        },
+        "break-loop-2": {
+          "title": "Break loop",
+          "connector": {
+            "name": "break-loop",
+            "version": "1.0"
+          },
+          "operation": "break",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "date-time-helpers-1": {
+          "title": "Get current time and date",
+          "connector": {
+            "name": "date-time-helpers",
+            "version": "3.0"
+          },
+          "operation": "current_timestamp",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "format": {
+              "type": "object",
+              "value": {
+                "existing_format": {
+                  "type": "string",
+                  "value": "YYYY-MM-DDTHH:mm:ssZ"
+                }
+              }
+            }
+          }
+        },
+        "storage-1": {
+          "title": "Fetch Last Run Time",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Workflow"
+            },
+            "default_value": {
+              "type": "null",
+              "value": null
+            },
+            "key": {
+              "type": "string",
+              "value": "lastRunTime"
+            }
+          }
+        },
+        "break-loop-1": {
+          "title": "Break loop",
+          "connector": {
+            "name": "break-loop",
+            "version": "1.0"
+          },
+          "operation": "break",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "http-client-2": {
+          "title": "Query Confluence pages",
+          "connector": {
+            "name": "http-client",
+            "version": "5.4"
+          },
+          "operation": "get_request",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "df794c40-89d9-45a4-bb78-817deb28c8ef",
+            "title": "Confluence account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/artisan/icons/a2c18f37c29299af8db8230ec35e59cd.png"
+            },
+            "scopes": [],
+            "service_name": "confluence",
+            "service_version": 1
+          },
+          "properties": {
+            "queries": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "orderBy"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "history.lastUpdated"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "expand"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "history.lastUpdated,body.view,space"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "start"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.storage-5.value",
+                      "fallback": {
+                        "value": "0",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "headers": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "Authorization"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "Basic {$.steps.text-helpers-1.result}"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "Accept"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "application/json"
+                    }
+                  }
+                }
+              ]
+            },
+            "auth": {
+              "type": "object",
+              "value": {
+                "none": {
+                  "type": "null",
+                  "value": null
+                }
+              }
+            },
+            "follow_redirect": {
+              "type": "boolean",
+              "value": false
+            },
+            "parse_response": {
+              "type": "string",
+              "value": "true"
+            },
+            "follow_keep_method": {
+              "type": "boolean",
+              "value": false
+            },
+            "url": {
+              "type": "string",
+              "value": "https://{$.auth.domain_name}.atlassian.net/wiki/rest/api/content"
+            },
+            "reject_unauthorized": {
+              "type": "boolean",
+              "value": true
+            },
+            "status_code": {
+              "type": "object",
+              "value": {
+                "range": {
+                  "type": "object",
+                  "value": {
+                    "from": {
+                      "type": "integer",
+                      "value": 200
+                    },
+                    "to": {
+                      "type": "integer",
+                      "value": 299
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "script-2": {
+          "title": "Docs -> Algolia ops",
+          "connector": {
+            "name": "script",
+            "version": "3.0"
+          },
+          "operation": "execute",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "variables": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "string",
+                      "value": "results"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.http-client-2.response.body.results"
+                    }
+                  }
+                }
+              ]
+            },
+            "script": {
+              "type": "string",
+              "value": "// Map each one of the 'page' object from Confluence to an Algolia 'addObject' operation.\nexports.step = function(input, fileInput) {\n        const { results } = input;\n        const records = [];\n        \n        for (let index = 0; index < results.length; index++) {\n              const page = results[index];\n              const record = {\n                contentId: page.id,\n                source: 'Confluence',\n                name: page.title,\n                space: page.space.name,\n                createdBy: page.history.createdBy.displayName,\n                createdAt: moment(page.history.createdDate).unix(),\n                lastUpdatedBy: page.history.lastUpdated.by.displayName,\n                lastUpdatedAt: moment(page.history.lastUpdated.when).unix()\n             };\n             let content = mout.string.stripHtmlTags(page.body.view.value);\n             let contentIndex = 0;\n             while (content.length) {\n                const chunk = content.replace(/^(.{600}[^\\s]*).*/, '$1');\n                content = content.substring(chunk.length);\n                records.push(\n                  Object.assign({}, record, {\n                    content: chunk,\n                    objectID: `${page.id}_${contentIndex}`\n                  })\n                );\n               contentIndex++;\n             }\n        }\n     return {\n       requests: records.map(record => {\n           return {\n             action: 'addObject',\n             body: record\n           }\n         })\n     }\n}"
+            },
+            "file_output": {
+              "type": "boolean",
+              "value": false
+            }
+          }
+        },
+        "date-time-helpers-2": {
+          "title": "LastRunTime vs. Last Updated",
+          "connector": {
+            "name": "date-time-helpers",
+            "version": "3.0"
+          },
+          "operation": "compare_dates",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "comparison": {
+              "type": "string",
+              "value": "IS BEFORE"
+            },
+            "resolution": {
+              "type": "string",
+              "value": ""
+            },
+            "date_b": {
+              "type": "jsonpath",
+              "value": "$.steps.storage-1.value"
+            },
+            "date_a": {
+              "type": "jsonpath",
+              "value": "$.steps.http-client-2.response.body.results[0].history.lastUpdated.when"
+            }
+          }
+        },
+        "trigger": {
+          "title": "Scheduled Trigger",
+          "connector": {
+            "name": "scheduled",
+            "version": "3.5"
+          },
+          "operation": "simple",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "synchronous": {
+              "type": "boolean",
+              "value": true
+            },
+            "public_url": {
+              "type": "jsonpath",
+              "value": "$.env.public_url"
+            },
+            "interval": {
+              "type": "integer",
+              "value": 1
+            },
+            "time_unit": {
+              "type": "string",
+              "value": "minutes"
+            }
+          }
+        }
+      },
+      "dependencies": []
+    }
+  ]
+}

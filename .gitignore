@@ -1,0 +1,11 @@
+.env
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+!/yarn.lock
+composer.lock

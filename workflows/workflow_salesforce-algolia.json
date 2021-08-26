@@ -1,0 +1,655 @@
+ {
+  "export_type": "workflow",
+  "projects": [],
+  "tray_export_version": 4,
+  "workflows": [
+    {
+      "id": "4d2bc8f2-2512-406a-b077-c3589e7adf19",
+      "created": "2021-08-18T12:20:08.582Z",
+      "workspace_id": "b907f427-56aa-48dd-bd4e-fb134dd4526c",
+      "creator": "092693fa-eaf3-41cd-9838-975872323870",
+      "version": {
+        "id": "c3aff360-70c3-4537-9747-8b63bb303712",
+        "created": "2021-08-23T13:52:05.423Z"
+      },
+      "title": "Salesforce -> Algolia",
+      "enabled": false,
+      "tags": [],
+      "settings": {
+        "config": {
+          "indexName": ""
+        },
+        "input_schema": {},
+        "output_schema": {}
+      },
+      "steps_structure": [
+        {
+          "name": "trigger",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "date-time-helpers-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "storage-1",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "loop-3",
+          "type": "loop",
+          "content": {
+            "_loop": [
+              {
+                "name": "storage-5",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "salesforce-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "script-2",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "http-client-1",
+                "type": "normal",
+                "content": {}
+              },
+              {
+                "name": "boolean-condition-2",
+                "type": "branch",
+                "content": {
+                  "true": [
+                    {
+                      "name": "break-loop-1",
+                      "type": "break",
+                      "content": {},
+                      "target": "loop-3"
+                    }
+                  ],
+                  "false": [
+                    {
+                      "name": "storage-7",
+                      "type": "normal",
+                      "content": {}
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "storage-2",
+          "type": "normal",
+          "content": {}
+        },
+        {
+          "name": "terminate-1",
+          "type": "normal",
+          "content": {}
+        }
+      ],
+      "steps": {
+        "loop-3": {
+          "title": "Salesforce Pagination",
+          "description": "Using pageToken",
+          "connector": {
+            "name": "loop",
+            "version": "1.1"
+          },
+          "operation": "loop_forever",
+          "output_schema": {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-03/schema",
+            "id": "http://jsonschema.net",
+            "required": true,
+            "properties": {
+              "index": {
+                "type": "number",
+                "id": "http://jsonschema.net/index"
+              }
+            }
+          },
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-2": {
+          "title": "Set LastRunTime",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Workflow"
+            },
+            "key": {
+              "type": "string",
+              "value": "lastRunTime"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.date-time-helpers-1.result"
+            }
+          }
+        },
+        "storage-5": {
+          "title": "Get nextPageOffset",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "NextPageOffset"
+            },
+            "default_value": {
+              "type": "number",
+              "value": 0
+            }
+          }
+        },
+        "boolean-condition-2": {
+          "title": "NextPageOffset is null",
+          "connector": {
+            "name": "boolean-condition",
+            "version": "2.3"
+          },
+          "operation": "boolean_condition",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "value1": {
+                      "type": "jsonpath",
+                      "value": "$.steps.salesforce-1.next_page_offset"
+                    },
+                    "comparison_type": {
+                      "type": "string",
+                      "value": "==="
+                    },
+                    "value2": {
+                      "type": "null",
+                      "value": null
+                    }
+                  }
+                }
+              ]
+            },
+            "strictness": {
+              "type": "string",
+              "value": "All"
+            }
+          }
+        },
+        "terminate-1": {
+          "title": "Terminate",
+          "connector": {
+            "name": "terminate",
+            "version": "1.0"
+          },
+          "operation": "terminate_run",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "storage-7": {
+          "title": "Set NextPageOffset",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "set",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Current Run"
+            },
+            "key": {
+              "type": "string",
+              "value": "NextPageOffset"
+            },
+            "value": {
+              "type": "jsonpath",
+              "value": "$.steps.salesforce-1.next_page_offset"
+            }
+          }
+        },
+        "http-client-1": {
+          "title": "Http Client",
+          "connector": {
+            "name": "http-client",
+            "version": "5.4"
+          },
+          "operation": "post_request",
+          "output_schema": {},
+          "error_handling": {},
+          "authentication": {
+            "group": "05df1822-b8e2-4d68-9c22-a04806ddfe45",
+            "title": "Algolia account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/icons/15f0f0f427b7a1c7c54051234900fdc4.png"
+            },
+            "scopes": [],
+            "service_name": "algolia",
+            "service_version": 1
+          },
+          "properties": {
+            "body": {
+              "type": "object",
+              "value": {
+                "raw": {
+                  "type": "jsonpath",
+                  "value": "$.steps.script-2.result"
+                }
+              }
+            },
+            "headers": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "X-Algolia-Application-Id"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.auth.application_id"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "X-Algolia-API-Key"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.auth.admin_api_key"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "value": {
+                    "key": {
+                      "type": "string",
+                      "value": "Content-Type"
+                    },
+                    "value": {
+                      "type": "string",
+                      "value": "application/json; charset=UTF-8"
+                    }
+                  }
+                }
+              ]
+            },
+            "auth": {
+              "type": "object",
+              "value": {
+                "none": {
+                  "type": "null",
+                  "value": null
+                }
+              }
+            },
+            "follow_redirect": {
+              "type": "boolean",
+              "value": false
+            },
+            "parse_response": {
+              "type": "string",
+              "value": "true"
+            },
+            "follow_keep_method": {
+              "type": "boolean",
+              "value": false
+            },
+            "url": {
+              "type": "string",
+              "value": "https://{$.auth.application_id}.algolia.net/1/indexes/{$.config.indexName}/batch"
+            },
+            "reject_unauthorized": {
+              "type": "boolean",
+              "value": true
+            },
+            "status_code": {
+              "type": "object",
+              "value": {
+                "range": {
+                  "type": "object",
+                  "value": {
+                    "from": {
+                      "type": "integer",
+                      "value": 200
+                    },
+                    "to": {
+                      "type": "integer",
+                      "value": 299
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "salesforce-1": {
+          "title": "Salesforce",
+          "connector": {
+            "name": "salesforce",
+            "version": "8.2"
+          },
+          "operation": "find_records",
+          "output_schema": {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "title": "Total count"
+              },
+              "next_page_offset": {
+                "type": "string",
+                "title": "Next page offset"
+              },
+              "records": {
+                "title": "Accounts",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "title": "Account",
+                  "properties": {
+                    "Name": {
+                      "name": "Name",
+                      "type": "string",
+                      "title": "Account Name"
+                    },
+                    "Description": {
+                      "name": "Description",
+                      "type": "string",
+                      "title": "Account Description"
+                    },
+                    "SDR__c": {
+                      "name": "SDR__c",
+                      "type": "string",
+                      "title": "SDR Owner"
+                    },
+                    "Id": {
+                      "name": "Id",
+                      "type": "string",
+                      "title": "Account ID"
+                    },
+                    "CreatedDate": {
+                      "name": "CreatedDate",
+                      "type": "string",
+                      "title": "Created Date"
+                    },
+                    "LastActivityDatetime__c": {
+                      "name": "LastActivityDatetime__c",
+                      "type": "string",
+                      "title": "Last Activity Datetime"
+                    },
+                    "Ownership": {
+                      "name": "Ownership",
+                      "type": "string",
+                      "title": "Ownership"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "error_handling": {},
+          "authentication": {
+            "group": "4f7285d1-4625-493f-b1bf-3432f2a9d4d9",
+            "title": "Salesforce account",
+            "service_icon": {
+              "icon_type": "url",
+              "value": "//s3.amazonaws.com/images.tray.io/static/service/icons/a8ff6c9514c35c853b350382534fb624.png"
+            },
+            "scopes": [
+              "refresh_token",
+              "full",
+              "api"
+            ],
+            "service_name": "salesforce",
+            "service_version": 1
+          },
+          "properties": {
+            "fields": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "string",
+                  "value": "Name"
+                },
+                {
+                  "type": "string",
+                  "value": "Description"
+                },
+                {
+                  "type": "string",
+                  "value": "SDR__c"
+                },
+                {
+                  "type": "string",
+                  "value": "Id"
+                },
+                {
+                  "type": "string",
+                  "value": "CreatedDate"
+                },
+                {
+                  "type": "string",
+                  "value": "LastActivityDatetime__c"
+                },
+                {
+                  "value": "Ownership",
+                  "type": "string"
+                },
+                {
+                  "type": "string",
+                  "value": ""
+                }
+              ]
+            },
+            "conditions_type": {
+              "type": "string",
+              "value": "Match all conditions"
+            },
+            "include_all_fields": {
+              "type": "boolean",
+              "value": false
+            },
+            "object": {
+              "type": "string",
+              "value": "Account"
+            },
+            "limit": {
+              "type": "number",
+              "value": 1000
+            },
+            "conditions": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "field": {
+                      "type": "string",
+                      "value": "CreatedDate"
+                    },
+                    "operator": {
+                      "type": "string",
+                      "value": "Greater than"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.storage-1.value"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "date-time-helpers-1": {
+          "title": "Get current time and date",
+          "connector": {
+            "name": "date-time-helpers",
+            "version": "3.0"
+          },
+          "operation": "current_timestamp",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "format": {
+              "type": "object",
+              "value": {
+                "existing_format": {
+                  "type": "string",
+                  "value": "YYYY-MM-DDTHH:mm:ssZ"
+                }
+              }
+            }
+          }
+        },
+        "storage-1": {
+          "title": "Fetch Last Run Time",
+          "connector": {
+            "name": "storage",
+            "version": "1.4"
+          },
+          "operation": "get",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "scope": {
+              "type": "string",
+              "value": "Workflow"
+            },
+            "default_value": {
+              "type": "null",
+              "value": null
+            },
+            "key": {
+              "type": "string",
+              "value": "lastRunTime"
+            }
+          }
+        },
+        "break-loop-1": {
+          "title": "Break loop",
+          "connector": {
+            "name": "break-loop",
+            "version": "1.0"
+          },
+          "operation": "break",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {}
+        },
+        "script-2": {
+          "title": "Accounts -> Algolia ops",
+          "connector": {
+            "name": "script",
+            "version": "3.0"
+          },
+          "operation": "execute",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "variables": {
+              "type": "array",
+              "value": [
+                {
+                  "type": "object",
+                  "value": {
+                    "name": {
+                      "type": "string",
+                      "value": "records"
+                    },
+                    "value": {
+                      "type": "jsonpath",
+                      "value": "$.steps.salesforce-1.records"
+                    }
+                  }
+                }
+              ]
+            },
+            "script": {
+              "type": "string",
+              "value": "// Map each one of the 'record' object from Salesforce to an Algolia 'addObject' operation.\nexports.step = function(input, fileInput) {\n        const { records } = input;\n        return {\n          requests: records.map(record => {\n           return {\n                action: 'addObject',\n                body: {\n                     objectID:  record.Id,\n           \t         source: 'Salesforce',\n                     name: record.Name,\n                     type: 'Account',\n                     lastActivityAt: record.LastActivityDatetime__c !== null ? moment(record.LastActivityDatetime__c).unix() : moment(record.CreatedDate).unix(),\n                     createdAt: moment(record.CreatedDate).unix()\n                }\n           }\n          })\n        };\n};"
+            },
+            "file_output": {
+              "type": "boolean",
+              "value": false
+            }
+          }
+        },
+        "trigger": {
+          "title": "Scheduled Trigger",
+          "connector": {
+            "name": "scheduled",
+            "version": "3.5"
+          },
+          "operation": "simple",
+          "output_schema": {},
+          "error_handling": {},
+          "properties": {
+            "synchronous": {
+              "type": "boolean",
+              "value": true
+            },
+            "public_url": {
+              "type": "jsonpath",
+              "value": "$.env.public_url"
+            },
+            "interval": {
+              "type": "integer",
+              "value": 1
+            },
+            "time_unit": {
+              "type": "string",
+              "value": "minutes"
+            }
+          }
+        }
+      },
+      "dependencies": []
+    }
+  ]
+}
