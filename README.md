@@ -10,6 +10,8 @@ The sample app uses the following features:
 - Search all your content in a single search interface built with [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/)
 - Dynamically display facets using [DynamicWidgets](https://www.algolia.com/doc/api-reference/widgets/dynamic-facets/react/)
 
+<img src="demo/diagram.png?raw=true" alt="A flowchart of the internal search sample application" align="center">
+
 ## Demo (Try it yourself!)
 
 <img src="demo/demo_internal_search.gif?raw=true" alt="A short video clip displaying the Algolia internal search application" align="center">
